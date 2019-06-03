@@ -8,12 +8,16 @@ type Neuron struct {
 }
 
 func activationFuction (z float64) float64 {
-  return 1 / (1 + math.Pow(math.E, -1 * z))
+  //return 1 / (1 + math.Pow(math.E, -1 * z))
+  //return math.Tanh(z)
+  return ((1.0 / (1.0 + math.Pow(math.E, -1.0 * z)))*2.0) - 1
 }
 
 func (n Neuron) CalculateOutput (previousLayer []float64) float64 {
   if (len(n.Weights) != len(previousLayer)) {
-    panic(println("The amount of weights is not equal to the previous layer."))
+    println(len(n.Weights))
+    println(len(previousLayer))
+    panic("The amount of weights is not equal to the previous layer.")
   }
   acum := 0.0
   for i := 0; i < len(n.Weights); i++ {
@@ -24,6 +28,6 @@ func (n Neuron) CalculateOutput (previousLayer []float64) float64 {
 }
 
 func BuildNeuron (previousLayer int) Neuron {
-  var weights [previousLayer]int
+  weights := make([]float64, previousLayer)
   return Neuron{weights, 0.0}
 }
