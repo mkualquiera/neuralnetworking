@@ -15,8 +15,6 @@ func activationFuction (z float64) float64 {
 
 func (n Neuron) CalculateOutput (previousLayer []float64) float64 {
   if (len(n.Weights) != len(previousLayer)) {
-    println(len(n.Weights))
-    println(len(previousLayer))
     panic("The amount of weights is not equal to the previous layer.")
   }
   acum := 0.0

@@ -25,21 +25,27 @@ func (n *Network) Randomize () {
   }
 }
 
-func (n *Network) Mutate (biasMutationFactor float64, biasMutationProbability float64, weightMutationFactor float64, weightMutationProbability float64) {
+func (b *Network) Mutate (biasMutationFactor float64, biasMutationProbability float64, weightMutationFactor float64, weightMutationProbability float64, descriptor []int) Network {
+  n := BuildNetwork(descriptor)
   for layerIndex := 0; layerIndex < len(n.Layers); layerIndex++ {
     for neuronIndex := 0; neuronIndex < len(n.Layers[layerIndex].Neurons); neuronIndex++ {
       for weightIndex := 0; weightIndex < len(n.Layers[layerIndex].Neurons[neuronIndex].Weights); weightIndex++ {
         if (rand.Float64() < weightMutationProbability) {
           mutation := ((rand.Float64() * 2) - 1) * weightMutationFactor
-          n.Layers[layerIndex].Neurons[neuronIndex].Weights[weightIndex] += mutation
+          n.Layers[layerIndex].Neurons[neuronIndex].Weights[weightIndex] = b.Layers[layerIndex].Neurons[neuronIndex].Weights[weightIndex] + mutation
+        } else {
+          n.Layers[layerIndex].Neurons[neuronIndex].Weights[weightIndex] = b.Layers[layerIndex].Neurons[neuronIndex].Weights[weightIndex]
         }
       }
       if (rand.Float64() < biasMutationProbability) {
         mutation := ((rand.Float64() * 2) - 1) * biasMutationFactor
-        n.Layers[layerIndex].Neurons[neuronIndex].Bias += mutation
+        n.Layers[layerIndex].Neurons[neuronIndex].Bias = b.Layers[layerIndex].Neurons[neuronIndex].Bias + mutation
+      } else {
+        n.Layers[layerIndex].Neurons[neuronIndex].Bias = b.Layers[layerIndex].Neurons[neuronIndex].Bias
       }
     }
   }
+  return n
 }
 
 func BuildRandomNetwork (descriptor []int) Network {
